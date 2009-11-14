@@ -30,8 +30,5 @@ public abstract class ReadWriteLockExecutor {
       } finally {
          lock.readLock().unlock();
       }
-
-
-
    }
 }
