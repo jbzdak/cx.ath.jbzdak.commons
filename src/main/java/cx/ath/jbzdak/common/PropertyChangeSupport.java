@@ -62,8 +62,6 @@ public class PropertyChangeSupport implements Serializable{
 
    private final boolean ignoreEventsWithSameValues;
 
-   
-
    private static boolean equals(Object object1, Object object2) {
       if (object1 == object2) {
          return true;
