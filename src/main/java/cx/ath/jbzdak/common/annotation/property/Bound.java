@@ -1,4 +1,4 @@
-package cx.ath.jbzdak.common;
+package cx.ath.jbzdak.common.annotation.property;
 
 import java.lang.annotation.*;
 
