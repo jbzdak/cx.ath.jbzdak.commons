@@ -11,5 +11,8 @@ import java.lang.annotation.*;
  */
 @Target({ElementType.FIELD, ElementType.METHOD})
 @Retention(RetentionPolicy.CLASS)
+@Inherited
 @Documented
-public @interface Bound { }
+public @interface Bound {
+   Effective effective() default Effective.EFFECTIVE_INSTANTLY;
+}
