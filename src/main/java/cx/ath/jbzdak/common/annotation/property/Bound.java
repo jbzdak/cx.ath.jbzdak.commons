@@ -15,4 +15,6 @@ import java.lang.annotation.*;
 @Documented
 public @interface Bound {
    Effective effective() default Effective.EFFECTIVE_INSTANTLY;
+
+   String description() default "";
 }
