@@ -1,5 +1,6 @@
 package cx.ath.jbzdak.common;
 
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -21,10 +22,11 @@ public abstract class CloseableThread extends Thread{
       shutdownLock.lock();
       try{
          needsShutDown = true;
-         interrupt();
+
          while(!shutDown){
             try {
-               shutdownCondition.await();
+               this.interrupt();
+               shutdownCondition.await(100, TimeUnit.MILLISECONDS);
             } catch (InterruptedException e) {
                //ignore
             }
