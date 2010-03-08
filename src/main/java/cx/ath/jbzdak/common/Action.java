@@ -5,4 +5,6 @@ package cx.ath.jbzdak.common;
  *         Date: Mar 6, 2010
  */
 public interface Action {
+
+   public void exec();
 }
