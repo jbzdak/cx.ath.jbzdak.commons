@@ -30,6 +30,16 @@
     <groupId>cx.ath.jbzdak</groupId>
     <artifactId>commons</artifactId>
     <version>1.0</version>
+
+    <distributionManagement>
+        <repository>
+            <name>Jacek Bzdak repo</name>
+            <id>jbrepo</id>
+            <url>scpexe://skimbleshanks.ath.cx/opt/sonatype-work/nexus/storage/releases</url>
+            <uniqueVersion>true</uniqueVersion>
+        </repository>
+    </distributionManagement>
+   
     <dependencies>
         <dependency>
             <groupId>org.slf4j</groupId>
