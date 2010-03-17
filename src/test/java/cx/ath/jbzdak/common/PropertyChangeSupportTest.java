@@ -1,3 +1,4 @@
+/*
 package cx.ath.jbzdak.common;
 
 import org.junit.Assert;
@@ -12,10 +13,12 @@ import java.beans.PropertyChangeListener;
 import java.io.*;
 import java.rmi.server.UID;
 
+*/
 /**
  * @author Jacek Bzdak jbzdak@gmail.com
  *         Date: 2009-10-30
- */
+ *//*
+
 public class PropertyChangeSupportTest {
 
    String source;
@@ -107,3 +110,4 @@ public class PropertyChangeSupportTest {
 
    }
 }
+*/
