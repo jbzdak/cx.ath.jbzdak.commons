@@ -18,6 +18,17 @@ public class LockUtils {
       }
    }
 
+   public static <T> T lockAndExecute(Lock lock, ReturnableAction<T> action){
+      lock.lock();
+      try{
+         return action.exec();
+      } finally {
+         lock.unlock();
+      }
+   }
+
+
+
    public static boolean tryLockAndExecute(Lock lock, Action action){
       if(!lock.tryLock()){
          return false;
