@@ -29,18 +29,18 @@
    </parent>
    <groupId>cx.ath.jbzdak</groupId>
    <artifactId>commons</artifactId>
-   <version>1.1-SNAPSHOT</version>
+   <version>1.1.1</version>
 
    <distributionManagement>
       <repository>
          <name>Jbzdak repo</name>
          <id>archiva-skimble</id>
-         <url>http://skimbleshanks.ath.cx/archiva/repository/internal/</url>
+         <url>https://skimbleshanks.ath.cx/archiva/repository/internal/</url>
          <uniqueVersion>true</uniqueVersion>
       </repository>
       <snapshotRepository>
          <id>archiva-skimble-snapshot</id>
-         <url>http://skimbleshanks.ath.cx/archiva/repository/snapshots/</url>
+         <url>https://skimbleshanks.ath.cx/archiva/repository/snapshots/</url>
       </snapshotRepository>
    </distributionManagement>
 
