@@ -14,7 +14,6 @@ public class InstantiateTransformer<CLS> implements Transformer<CLS, String>{
     * @throws RuntimeException if any checked exception is raised 
     */
    public CLS transform(String classname) {
-
       try {
          return (CLS) Class.forName(classname).newInstance();
       }catch (RuntimeException  e){

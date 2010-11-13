@@ -2,6 +2,9 @@ package cx.ath.jbzdak.common.properties;
 
 import cx.ath.jbzdak.common.collections.Transformer;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -13,9 +16,27 @@ public class ExtendedProperties extends AbstractMap<String, String> implements M
 
    Properties properties;
 
+   DateFormat defaultDateFormat;
+
 
    public ExtendedProperties(Properties properties) {
       this.properties = properties;
+   }
+
+   public Properties getProperties() {
+      return properties;
+   }
+
+   public void setProperties(Properties properties) {
+      this.properties = properties;
+   }
+
+   public DateFormat getDefaultDateFormat() {
+      return defaultDateFormat;
+   }
+
+   public void setDefaultDateFormat(DateFormat defaultDateFormat) {
+      this.defaultDateFormat = defaultDateFormat;
    }
 
    @Override
@@ -32,9 +53,21 @@ public class ExtendedProperties extends AbstractMap<String, String> implements M
       return Integer.parseInt(get(key));
    }
 
+   public Date getAsDate(String key, DateFormat dateFormat) throws ParseException {
+      return dateFormat.parse(get(key));
+   }
+
+   public Date getAsDate(String key, String dateFormat) throws ParseException {
+      return new SimpleDateFormat(dateFormat).parse(get(key));
+   }
+
+   public Date getAsDate(String key) throws ParseException {
+      return defaultDateFormat.parse(get(key));
+   }
+
    private static void assertLen(List<?> objects, int len){
-      if(objects.size() < len){
-         while(objects.size() == len){
+      if(objects.size() <= len){
+         while(objects.size() <= len){
             objects.add(null);
          }
       }
@@ -69,7 +102,7 @@ public class ExtendedProperties extends AbstractMap<String, String> implements M
       return result;
    }
 
-   
+
 
 //   public int get
 
@@ -102,7 +135,7 @@ public class ExtendedProperties extends AbstractMap<String, String> implements M
 
          @Override
          public int size() {
-            return entrySet().size();
+            return entries.size();
          }
       };
    }

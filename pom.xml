@@ -35,7 +35,7 @@
       <repository>
          <name>Jbzdak repo</name>
          <id>archiva-skimble</id>
-         <url>https://skimbleshanks.ath.cx/archiva/repository/internal/</url>
+         <url>https://skimbleshanks.ath.cx/archiva/repository/public/</url>
          <uniqueVersion>true</uniqueVersion>
       </repository>
       <snapshotRepository>

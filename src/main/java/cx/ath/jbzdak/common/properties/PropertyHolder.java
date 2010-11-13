@@ -24,14 +24,15 @@ public class PropertyHolder {
       }
       File file = new File(userResources);
       file.getParentFile().mkdirs();
-      if (!file.exists()){
-         file.createNewFile();
-      }
+//      if (!file.exists()){
+//         file.createNewFile();
+//      }
       if (file.exists()){
-         properties = new Properties(properties);
          properties.load(new FileInputStream(file));
       }else{
+         file.createNewFile();
          properties.store(new FileOutputStream(file), "Auto generated");
+
       }
    }
 
