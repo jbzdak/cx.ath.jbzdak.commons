@@ -34,9 +34,8 @@
     <distributionManagement>
         <repository>
             <name>Jacek Bzdak repo</name>
-            <id>jbrepo</id>
-            <url>scpexe://skimbleshanks.ath.cx/opt/sonatype-work/nexus/storage/releases</url>
-            <uniqueVersion>true</uniqueVersion>
+            <id>skimble-archiva</id>
+            <url>http://skimbleshanks.ath.cx/archiva/repository/public/</url>            
         </repository>
     </distributionManagement>
    
@@ -46,8 +45,8 @@
             <artifactId>slf4j-api</artifactId>
             <version>1.5.8</version>
         </dependency>
-                <dependency>
-            <groupId>edu.umd.cs.findbugs</groupId>
+        <dependency>
+            <groupId>cx.ath.jbzdak.external.findbugs</groupId>
             <artifactId>annotations</artifactId>
             <version>1.3.9</version>
         </dependency>
