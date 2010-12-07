@@ -70,7 +70,10 @@ public class FakeEnum<E> {
    }
 
    public String nameOf(E value){
-      return constantsReversed.get(value);
+      if (constantsReversed.containsKey(value)){
+         return constantsReversed.get(value);
+      }
+      throw new RuntimeException();      
    }
 
    public Collection<? extends E> values(){

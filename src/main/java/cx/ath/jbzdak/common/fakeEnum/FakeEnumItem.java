@@ -14,7 +14,5 @@ public class FakeEnumItem<FE extends FakeEnumItem> {
    public final boolean equals(Object e2){
       return fakeEnum.equals(this, e2);
    }
-
-   
    
 }

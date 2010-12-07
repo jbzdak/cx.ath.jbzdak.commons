@@ -90,6 +90,7 @@ public class ExtendedProperties extends AbstractMap<String, String> implements M
             result.set(index, entry.getValue());
          }
       }
+      while (result.remove(null));
       return result;
    }
 
