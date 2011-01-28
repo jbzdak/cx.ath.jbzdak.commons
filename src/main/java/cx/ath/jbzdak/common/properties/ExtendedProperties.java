@@ -2,6 +2,7 @@ package cx.ath.jbzdak.common.properties;
 
 import cx.ath.jbzdak.common.collections.Transformer;
 
+import java.awt.image.Kernel;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -72,6 +73,55 @@ public class ExtendedProperties extends AbstractMap<String, String> implements M
          }
       }
    }
+
+   public Collection<String> getMatching(String pattern){
+      Pattern p = Pattern.compile(pattern);
+      List<String> result = new ArrayList<String>();
+      for (Entry<String, String> e : entrySet()) {
+         if(p.matcher(e.getKey()).matches()){
+            result.add(e.getValue());
+         }
+      }
+      return result;
+   }
+
+   /**
+    * Returns set that consists of pairs <code>(pattern.mather(key).group(1), value)</code>
+    * @param pattern
+    * @return
+    */
+   public Set<Entry<String, String>> getMatchingEntries(String pattern){
+      Pattern p = Pattern.compile(pattern);
+      Set<Entry<String, String>> result = new HashSet<Entry<String, String>>();
+      for (Entry<String, String> e : entrySet()) {
+         Matcher matcher = p.matcher(e.getKey());
+         if(matcher.matches()){
+            result.add(new SimpleImmutableEntry<String, String>(matcher.group(1), e.getValue()));
+         }
+      }
+      return result;
+   }
+
+   /**
+    * Returns set that consists of pairs <code>(pattern.mather(key).group(1), value)</code>
+    * @param pattern
+    * @return
+    */
+   public <K, V> Set<Entry<K, V>> getMatchingEntries(String pattern,
+                                                        Transformer<K, String> keyTransformer,
+                                                        Transformer<V, String> valueTransformer){
+      Pattern p = Pattern.compile(pattern);
+      Set<Entry<K, V>> result = new HashSet<Entry<K, V>>();
+      for (Entry<String, String> e : entrySet()) {
+         Matcher matcher = p.matcher(e.getKey());
+         if(matcher.matches()){
+            result.add(new SimpleImmutableEntry<K, V>(keyTransformer.transform(matcher.group(1)),
+                                                      valueTransformer.transform(e.getValue())));
+         }
+      }
+      return result;
+   }
+
 
    /**
     * Returns list of values.
