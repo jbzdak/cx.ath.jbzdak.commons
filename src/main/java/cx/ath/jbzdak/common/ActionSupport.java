@@ -54,6 +54,11 @@ public class ActionSupport {
       fireActionEvent(command, id, 0, 0);
    }
 
+
+   public void fireActionEvent(String command){
+      fireActionEvent(command, command.hashCode(), 0, 0);
+   }
+
    public void fireActionEvent(){
       fireActionEvent("DEFAULT", 0, 0, 0);
    }
