@@ -18,20 +18,25 @@ public class PropertyHolder {
       try {
          properties.load(clazz.getResourceAsStream(defaultResources));
       } catch (IOException e) {
-         throw new IOException("Couldnt load default properties", e);
+         throw new IOException("Couldnt load default properties from '" + defaultResources + "'", e);
       } catch (NullPointerException e){
-         throw new IOException("Couldnt load default properties", e);
+         throw new IOException("Couldnt load default properties from '" + defaultResources + "'", e);
       }
       File file = new File(userResources);
       file.getParentFile().mkdirs();
-      if (!file.exists()){
+      boolean exists = file.exists();
+      if (!exists){
          file.createNewFile();
       }
-      if (file.exists()){
-         properties = new Properties(properties);
+      if (exists){
+//         properties = new Properties(properties);
          properties.load(new FileInputStream(file));
       }else{
          properties.store(new FileOutputStream(file), "Auto generated");
       }
+   }
+
+   public Properties getProperties() {
+      return properties;
    }
 }
