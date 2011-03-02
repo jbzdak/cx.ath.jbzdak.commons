@@ -5,10 +5,9 @@ import javax.persistence.EntityManager;
 /**
  * Created by IntelliJ IDEA.
  * User: Jacek Bzdak
- * Date: 2/28/11
+ * Date: 1/30/11
  */
-public interface TransactionExecutor {
+public interface ReturnableTransactionExecutor<T> {
 
-   public void execute(EntityManager entityManager);
-
+   public T execute(EntityManager entityManager);
 }
