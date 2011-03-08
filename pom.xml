@@ -38,7 +38,7 @@
     <repositories>
         <repository>
             <id>skimble-public</id>
-            <url>http://skimbleshanks.ath.cx/archiva/repository/public/</url>
+            <url>http://skimbleshanks.ath.cx/archiva/repository/public-group/</url>
             <!-- Prywatne repozytorium autora -->
         </repository>
     </repositories>
