@@ -7,6 +7,7 @@ import javax.persistence.EntityManagerFactory;
  * Created by: Jacek Bzdak
  */
 public class DBUtils {
+
    public static <T> T executeInTransaction(EntityManagerFactory entityManagerFactory, ReturnableTransactionExecutor<T> executor) {
       EntityManager entityManager = entityManagerFactory.createEntityManager();
       T result;
@@ -14,15 +15,15 @@ public class DBUtils {
          entityManager.getTransaction().begin();
          result = executor.execute(entityManager);
          entityManager.getTransaction().commit();
+         return result;
       } catch (RuntimeException e){
          if(entityManager.getTransaction().isActive()){
             entityManager.getTransaction().rollback();
          }
          throw e;
       } finally {
-         entityManager.close();;
+         entityManager.close();
       }
-      return result;
    }
 
 

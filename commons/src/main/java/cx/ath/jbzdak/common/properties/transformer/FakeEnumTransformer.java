@@ -1,12 +1,11 @@
-package cx.ath.jbzdak.common.properties;
+package cx.ath.jbzdak.common.properties.transformer;
 
-import cx.ath.jbzdak.common.collections.Transformer;
 import cx.ath.jbzdak.common.fakeEnum.FakeEnum;
 
 /**
  * @author Jacek Bzdak
  */
-public class FakeEnumTransformer<T> implements Transformer<T,String>{
+public class FakeEnumTransformer<T> implements Transformer<T>{
 
    private final FakeEnum<T> fakeEnum;
 
@@ -14,8 +13,12 @@ public class FakeEnumTransformer<T> implements Transformer<T,String>{
       this.fakeEnum = fakeEnum;
    }
 
-   public T transform(String value) {
+   public T transformReverse(String value) {
       return fakeEnum.valueOf(value);
+   }
+
+   public String transform(T value) {
+      return fakeEnum.nameOf(value);
    }
 }
 
