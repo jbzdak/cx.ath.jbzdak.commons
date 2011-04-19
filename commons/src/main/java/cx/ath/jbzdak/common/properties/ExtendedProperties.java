@@ -19,7 +19,6 @@ public class ExtendedProperties extends AbstractMap<String, String> implements M
 
    DateFormat defaultDateFormat;
 
-
    public ExtendedProperties(Properties properties) {
       this.properties = properties;
    }
