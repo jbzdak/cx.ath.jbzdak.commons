@@ -26,20 +26,33 @@ public class DBUtils {
       }
    }
 
+   public static void executeInTransaction(EntityManagerFactory entityManagerFactory, TransactionExecutor transactionExecutor){
+      executeInTransaction(entityManagerFactory, new TransactionWrapperObject(transactionExecutor));
+   }
 
-   public void executeInTransaction(EntityManagerFactory entityManagerFactory, TransactionExecutor transactionExecutor){
-      EntityManager entityManager = entityManagerFactory.createEntityManager();
-      try{
+   public static <T> T executeInTransaction(EntityManager entityManager, ReturnableTransactionExecutor<T> executor) {
+      boolean inTransaction = entityManager.getTransaction().isActive();
+      if(!inTransaction){
          entityManager.getTransaction().begin();
-         transactionExecutor.execute(entityManager);
-         entityManager.getTransaction().commit();
-      } catch (RuntimeException e){
+      }
+      try{
+         T result = executor.execute(entityManager);
+         if(!inTransaction){
+            entityManager.getTransaction().commit();
+         }
+         return result;
+      }catch (RuntimeException e){
          if(entityManager.getTransaction().isActive()){
             entityManager.getTransaction().rollback();
          }
-
-      } finally {
-         entityManager.close();
+         throw e;
       }
    }
+
+   public static void executeInTransaction(EntityManager entityManager, TransactionExecutor executor) {
+      executeInTransaction(entityManager, new TransactionWrapperObject(executor));
+   }
+
+
+
 }

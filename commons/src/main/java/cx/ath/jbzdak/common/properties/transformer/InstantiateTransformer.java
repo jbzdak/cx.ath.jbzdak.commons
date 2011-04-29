@@ -1,11 +1,9 @@
-package cx.ath.jbzdak.common.properties;
-
-import cx.ath.jbzdak.common.collections.Transformer;
+package cx.ath.jbzdak.common.properties.transformer;
 
 /**
  * @author Jacek Bzdak
  */
-public class InstantiateTransformer<CLS> implements Transformer<CLS, String>{
+public class InstantiateTransformer<CLS> implements Transformer<CLS>{
 
    /**
     * Instantiates object of class named <code>classname</code> using no arg constrctor.
@@ -13,7 +11,7 @@ public class InstantiateTransformer<CLS> implements Transformer<CLS, String>{
     * @return instance
     * @throws RuntimeException if any checked exception is raised 
     */
-   public CLS transform(String classname) {
+   public CLS transformReverse(String classname) {
       try {
          return (CLS) Class.forName(classname).newInstance();
       }catch (RuntimeException  e){
@@ -22,5 +20,9 @@ public class InstantiateTransformer<CLS> implements Transformer<CLS, String>{
       catch (Exception e){
          throw  new RuntimeException(e);
       }
+   }
+
+   public String transform(CLS value) {
+      return value.getClass().getCanonicalName();
    }
 }

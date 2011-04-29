@@ -40,54 +40,50 @@ public class ExtendedProperties extends AbstractExtendedProperties {
    }
 
    @Override
-   public boolean containsKey(Object key) {
-      return properties.containsKey(key);
-   }
-
-   @Override
-   public String get(Object key) {
-      return (String) properties.get(key);
-   }
-
-   @Override
    protected String getPropertyInternal(String keyName) {
       return properties.getProperty(keyName);
    }
 
    @Override
-   public Set<Entry<String, String>> entrySet() {
-      return new AbstractSet<Entry<String, String>>() {
+   protected String setPropertyInternal(String keyName, String value) {
+      return String.valueOf(properties.setProperty(keyName, value));
+   }
 
-         Set<Entry<Object, Object>> entries = properties.entrySet();
-
+   @Override
+   public Map<String, String> getAsMap() {
+      return new AbstractMap<String, String>() {
          @Override
-         public Iterator<Entry<String, String>> iterator() {
-            return new Iterator<Entry<String, String>>() {
+         public Set<Entry<String, String>> entrySet() {
+            return new AbstractSet<Entry<String, String>>() {
+               @Override
+               public Iterator<Entry<String, String>> iterator() {
+                  return new Iterator<Entry<String, String>>() {
 
-               Iterator<Entry<Object, Object>> iterator = entries.iterator();
+                     Iterator<Entry<Object, Object>> iterator = properties.entrySet().iterator();
 
-               public boolean hasNext() {
-                  return  iterator.hasNext();
+                     public boolean hasNext() {
+                        return iterator.hasNext();
+                     }
+
+                     public Entry<String, String> next() {
+                        Entry<Object, Object> entry = iterator.next();
+                        return new SimpleImmutableEntry<String, String>(String.valueOf(entry.getKey()), String.valueOf(entry.getValue()));
+                     }
+
+                     public void remove() {
+                        iterator.remove();
+                     }
+                  };
                }
 
-               public Entry<String, String> next() {
-                  final Entry<Object, Object> entry = iterator.next();
-                  return new SimpleEntry<String, String>(String.valueOf(entry.getKey()), String.valueOf(entry.getValue()));
-               }
-
-               public void remove() {
-                  iterator.remove();
+               @Override
+               public int size() {
+                  return properties.size();
                }
             };
          }
-
-         @Override
-         public int size() {
-            return entries.size();
-         }
       };
    }
-
 }
 
 

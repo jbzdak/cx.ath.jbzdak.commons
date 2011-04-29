@@ -1,31 +1,32 @@
 package cx.ath.jbzdak.common.properties;
 
-import com.sun.org.apache.xerces.internal.impl.dv.xs.IntegerDV;
-import com.sun.xml.internal.messaging.saaj.util.FinalArrayList;
-import cx.ath.jbzdak.common.properties.transformer.DateTransformer;
-import cx.ath.jbzdak.common.properties.transformer.IntTransformer;
-import cx.ath.jbzdak.common.properties.transformer.NoopTransformer;
-import cx.ath.jbzdak.common.properties.transformer.Transformer;
+import cx.ath.jbzdak.common.properties.transformer.*;
 
 import java.security.InvalidParameterException;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.Map.Entry;
+import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
  * Created by: Jacek Bzdak
  */
-public abstract class AbstractExtendedProperties extends AbstractMap<String, String>{
+public abstract class AbstractExtendedProperties{
 
    protected DateFormat defaultDateFormat;
 
    protected abstract String getPropertyInternal(String keyName);
 
+   protected abstract String setPropertyInternal(String keyName, String value);
+
+   public abstract Map<String, String> getAsMap();
+
    protected AbstractExtendedProperties() {
-      defaultDateFormat = new SimpleDateFormat("YYYY-MM-DD");
+      defaultDateFormat = new SimpleDateFormat("yyyy-MM-dd");
    }
 
    public <T> T getValue(String keyName, Transformer<T> transformer, T defaultValue){
@@ -36,6 +37,36 @@ public abstract class AbstractExtendedProperties extends AbstractMap<String, Str
       return transformer.transformReverse(value);
    }
 
+   public <T> String setValue(String keyName, Transformer<T> transformer, T value){
+      return setPropertyInternal(keyName, transformer.transform(value));
+   }
+
+   public String getString(String keyName, String defaultStr){
+      return getValue(keyName, NoopTransformer.NOOP_TRANSFORMER, defaultStr);
+   }
+
+   public String getString(String keyName){
+      return getString(keyName, null);
+   }
+
+   public Boolean getBoolen(String keyName, Boolean defaultValue){
+      return getValue(keyName, BooleanTransformer.BOOLEAN_TRANSFORMER, defaultValue);
+   }
+
+
+   public Boolean getBoolen(String keyName){
+      return getBoolen(keyName, null);
+   }
+
+
+   public String setBoolean(String keyName, Boolean value){
+      return setValue(keyName, BooleanTransformer.BOOLEAN_TRANSFORMER, value);
+   }
+
+   public String setString(String keyName, String keyValue){
+      return setValue(keyName, NoopTransformer.NOOP_TRANSFORMER, keyValue);
+   }
+
    public <T> T getValue(String keyName, Transformer<T> transformer){
       return getValue(keyName, transformer, null);
    }
@@ -44,12 +75,24 @@ public abstract class AbstractExtendedProperties extends AbstractMap<String, Str
       return getValue(keyName, new DateTransformer(dateFormat), defaultDate);
    }
 
+    public Date getDate(String keyName, DateFormat dateFormat){
+      return getDate(keyName, dateFormat, null);
+   }
+
    public Date getDate(String keyName, Date defaultDate){
       return getValue(keyName, new DateTransformer(defaultDateFormat), defaultDate);
    }
 
    public Date getDate(String keyName){
       return getValue(keyName, new DateTransformer(defaultDateFormat));
+   }
+
+   public String setDate(String keyName, DateFormat dateFormat, Date date){
+      return setValue(keyName, new DateTransformer(dateFormat), date);
+   }
+
+   public String setDate(String keyName, Date date){
+      return setValue(keyName, new DateTransformer(defaultDateFormat), date);
    }
 
    public void setDefaultDateFormat(DateFormat defaultDateFormat) {
@@ -68,10 +111,35 @@ public abstract class AbstractExtendedProperties extends AbstractMap<String, Str
       return getValue(keyName, new IntTransformer(), null);
    }
 
+   public String setInt(String ketyName, NumberFormat numberFormat, Integer integer){
+      return setValue(ketyName, new IntTransformer(numberFormat), integer);
+   }
+
+    public String setInt(String ketyName, Integer integer){
+      return setValue(ketyName, new IntTransformer(), integer);
+   }
+
+   public <T extends Enum> T getEnum(String keyName, Class<T> enumClass, T defaultValue){
+      return getValue(keyName, new EnumTransformer<T>(enumClass), defaultValue);
+   }
+
+   public <T extends Enum> T getEnum(String keyName, Class<T> enumClass){
+      return getEnum(keyName, enumClass, null);
+   }
+
+   public <T extends Enum> String setEnum(String keyName, T enumInstance){
+      if (enumInstance == null){
+         return setValue(keyName, NoopTransformer.NOOP_TRANSFORMER, null);
+      }  else {
+         return setValue(keyName, new EnumTransformer<T>((Class<T>) enumInstance.getClass()), enumInstance);
+      }
+   }
+
+
    public <T> Collection<T> getMatching(String pattern, Transformer<T> transformer){
       Pattern p = Pattern.compile(pattern);
       List<T> result = new ArrayList<T>();
-      for (Map.Entry<String, String> e : entrySet()) {
+      for (Map.Entry<String, String> e : getAsMap().entrySet()) {
          if(p.matcher(e.getKey()).matches()){
             result.add(transformer.transformReverse(e.getValue()));
          }
@@ -84,22 +152,22 @@ public abstract class AbstractExtendedProperties extends AbstractMap<String, Str
    }
 
 
-   public <K, V> Set<Entry<K, V>> getMatchingEntries(String pattern,
-                                                     cx.ath.jbzdak.common.collections.Transformer<K, String> keyTransformer,
-                                                     cx.ath.jbzdak.common.collections.Transformer<V, String> valueTransformer){
+   public <K, V> Set<Map.Entry<K, V>> getMatchingEntries(String pattern,
+                                                     Transformer<K> keyTransformer,
+                                                     Transformer<V> valueTransformer){
       Pattern p = Pattern.compile(pattern);
-      Set<Entry<K, V>> result = new HashSet<Entry<K, V>>();
-      for (Entry<String, String> e : entrySet()) {
+      Set<Map.Entry<K, V>> result = new HashSet<Entry<K, V>>();
+      for (Entry<String, String> e : getAsMap().entrySet()) {
          Matcher matcher = p.matcher(e.getKey());
          if(matcher.matches()){
             switch (matcher.groupCount()){
                case 0:
-                  result.add(new SimpleImmutableEntry<K, V>(keyTransformer.transform(matcher.group()),
-                       valueTransformer.transform(e.getValue())));
+                  result.add(new SimpleImmutableEntry<K, V>(keyTransformer.transformReverse(matcher.group()),
+                       valueTransformer.transformReverse(e.getValue())));
                   break;
                case 1:
-                  result.add(new SimpleImmutableEntry<K, V>(keyTransformer.transform(matcher.group(1)),
-                       valueTransformer.transform(e.getValue())));
+                  result.add(new SimpleImmutableEntry<K, V>(keyTransformer.transformReverse(matcher.group(1)),
+                       valueTransformer.transformReverse(e.getValue())));
                   break;
                default:
                   throw new InvalidParameterException();
@@ -108,6 +176,10 @@ public abstract class AbstractExtendedProperties extends AbstractMap<String, Str
          }
       }
       return result;
+   }
+
+      public Set<Entry<String, String>> getMatchingEntries(String pattern){
+      return getMatchingEntries(pattern, NoopTransformer.NOOP_TRANSFORMER, NoopTransformer.NOOP_TRANSFORMER);
    }
 
 
@@ -125,14 +197,14 @@ public abstract class AbstractExtendedProperties extends AbstractMap<String, Str
     *    <code>enty.(\\d+)</code> contents of that group will be used index of value in the list.
     * @return
     */
-   public <T> List<T> getList(String keyPattern, cx.ath.jbzdak.common.collections.Transformer<T, String> transformer){
+   public <T> List<T> getList(String keyPattern, Transformer<T> transformer){
       Pattern pattern = Pattern.compile(keyPattern);
       NavigableMap<Integer, T> result = new TreeMap<Integer, T>();
-      for (Entry<String, String> entry : entrySet()) {
+      for (Entry<String, String> entry : getAsMap().entrySet()) {
          final Matcher matcher = pattern.matcher(entry.getKey());
          if(matcher.matches()){
             int index = Integer.parseInt(matcher.group(1));
-            result.put(index, transformer.transform(entry.getValue()));
+            result.put(index, transformer.transformReverse(entry.getValue()));
          }
       }
       return new ArrayList<T>(result.values());
@@ -141,9 +213,4 @@ public abstract class AbstractExtendedProperties extends AbstractMap<String, Str
    public List<String> getList(String keyPattern){
       return getList(keyPattern, NoopTransformer.NOOP_TRANSFORMER);
    }
-
-
-
-
-
 }
