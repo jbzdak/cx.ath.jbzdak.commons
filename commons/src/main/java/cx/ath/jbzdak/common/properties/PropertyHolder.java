@@ -18,9 +18,9 @@ public class PropertyHolder {
       try {
          properties.load(clazz.getResourceAsStream(defaultResources));
       } catch (IOException e) {
-         throw new IOException("Couldnt load default properties", e);
+         throw new IOException("Couldnt load default properties from '" + defaultResources + "'", e);
       } catch (NullPointerException e){
-         throw new IOException("Couldnt load default properties", e);
+         throw new IOException("Couldnt load default properties '" + defaultResources + "'", e);
       }
       File file = new File(userResources);
       file.getParentFile().mkdirs();

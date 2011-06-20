@@ -15,7 +15,7 @@ public class ProcessUtils {
 
    private static final int DEFAULT_BUFFER_SIZE = 1024 * 4;
 
-   public static void waitForProcessEnd(Process process, boolean redirectIO) throws IOException {
+   public static void waitForProcessEnd(final Process process, final boolean redirectIO) throws IOException {
       Lock lock = new ReentrantLock();
       final Condition condition = lock.newCondition();
       while (true){
@@ -24,8 +24,18 @@ public class ProcessUtils {
             public void exec() {
                try {
                   condition.await(500, TimeUnit.MILLISECONDS);
+                  if(redirectIO){
+                     copy(process.getErrorStream(), System.err);
+                     copy(process.getInputStream(), System.err);
+                     System.out.flush();
+                  }else{
+                     discard(process.getInputStream());
+                     discard(process.getErrorStream());
+                  }
                } catch (InterruptedException e) {
                   return;
+               } catch (IOException e){
+                  throw new RuntimeException(e);
                }
             }
          });
@@ -35,6 +45,7 @@ public class ProcessUtils {
                if(redirectIO){
                   copy(process.getErrorStream(), System.err);
                   copy(process.getInputStream(), System.out);
+                  System.out.flush();
                }else{
                   discard(process.getInputStream());
                   discard(process.getErrorStream());

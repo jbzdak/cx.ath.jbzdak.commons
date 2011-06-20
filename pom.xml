@@ -26,7 +26,7 @@
     <groupId>cx.ath.jbzdak.commons</groupId>
     <artifactId>commons-main</artifactId>
     <packaging>pom</packaging>
-    <version>2.0</version>
+    <version>2.0.2</version>
     <modules>
         <module>commons</module>
         <module>commons-ejb</module>
@@ -34,19 +34,25 @@
 
     <name>Miscalenneus libraries</name>
 
+
     <distributionManagement>
         <repository>
-            <name>Jacek Bzdak repo</name>
-            <id>archiva-skimble</id>
-            <url>https://skimbleshanks.ath.cx/archiva/repository/public</url>
+            <id>lfitj-ilf</id>
+            <name>lfitj releases</name>
+            <url>http://lfitj.if.pw.edu.pl/artifactory/shared</url>
         </repository>
+        <snapshotRepository>
+            <id>lfitj-ilf/</id>
+            <name>Lfitj snapshot</name>
+            <url>http://lfitj.if.pw.edu.pl/artifactory/shared</url>
+        </snapshotRepository>
     </distributionManagement>
 
     <repositories>
         <repository>
-            <id>skimble-public</id>
-            <url>http://skimbleshanks.ath.cx/archiva/repository/public-group/</url>
-            <!-- Prywatne repozytorium autora -->
+            <name>Repozytorium na lfitj</name>
+            <id>lfitj-ilf-group</id>
+            <url>http://lfitj.if.pw.edu.pl/artifactory/shared/</url>
         </repository>
     </repositories>
 
@@ -88,6 +94,20 @@
     </dependencies>
 
     <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
         <pluginManagement>
             <plugins>
                 <plugin>

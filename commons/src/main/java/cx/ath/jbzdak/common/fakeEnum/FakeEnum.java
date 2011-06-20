@@ -29,7 +29,8 @@ public class FakeEnum<E> {
             Modifier.isStatic(mod) &&
             Modifier.isFinal(mod) &&
             Modifier.isPublic(mod) &&
-            clazz.isAssignableFrom(clazz)){
+            clazz.isAssignableFrom(field.getType()) &&
+            field.getAnnotation(FakeEnumIgnore.class) == null){
             fields.add(field);
          }
       }
@@ -82,6 +83,11 @@ public class FakeEnum<E> {
 
    public E valueOf(String s){
       return constants.get(s);
+   }
+
+
+   public String genToString(E o) {
+      return o.getClass().getCanonicalName() + "@" + nameOf(o);
    }
 
    public boolean equals(Object e1, Object e2){

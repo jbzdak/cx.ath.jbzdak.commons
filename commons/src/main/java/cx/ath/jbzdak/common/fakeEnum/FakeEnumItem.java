@@ -7,6 +7,10 @@ public class FakeEnumItem<FE extends FakeEnumItem> {
 
    FakeEnum<FE> fakeEnum;
 
+   public FakeEnumItem(FakeEnum<FE> fakeEnum) {
+      this.fakeEnum = fakeEnum;
+   }
+
    public final String name(){
       return fakeEnum.nameOf((FE) this);
    }
