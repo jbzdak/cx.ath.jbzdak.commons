@@ -16,31 +16,6 @@ public abstract class MaskedEnum {
 
    protected final boolean useInDecomposition;
 
-   protected static <T extends MaskedEnum> NavigableMap<Integer, T> collect(FakeEnum<T> fakeEnum){
-      NavigableMap<Integer, T> result = new TreeMap<Integer, T>();
-      for (T t : fakeEnum.values()) {
-         if(!t.useInDecomposition){
-            continue;
-         }
-         if(result.containsKey(t.constant)){
-            throw new InvalidParameterException("Constants in navigable map cant repeat!");
-         }
-         result.put(t.constant, t);
-      }
-      return result;
-   }
-
-   protected static <T extends MaskedEnum> Set<T> decomposite(NavigableMap<Integer, T> map, int value){
-      Set<T> tSet = new HashSet<T>();
-      for (Map.Entry<Integer, T> entry : map.entrySet()) {
-         Integer key = entry.getKey();
-         if((value & key) == key){
-            tSet.add(entry.getValue());
-         }
-      }
-      return tSet;
-   }
-
    protected MaskedEnum(int constant) {
       this.constant = constant;
       this.useInDecomposition = true;
@@ -55,6 +30,11 @@ public abstract class MaskedEnum {
       this.constant = maskedEnum.constant;
       this.useInDecomposition = false;
    }
+
+   public int getConstant() {
+      return constant;
+   }
+
 
    public static int or(int base, MaskedEnum... enums){
       int result = base;
@@ -71,6 +51,11 @@ public abstract class MaskedEnum {
       }
       return result;
    }
+
+   public static int and(MaskedEnum... enums){
+       return and(0, enums);
+    }
+
 
    public static int switchOn(int base, MaskedEnum... enums){
       return or(base, enums);

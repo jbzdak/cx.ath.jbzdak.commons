@@ -29,6 +29,10 @@ public abstract class AbstractExtendedProperties{
       defaultDateFormat = new SimpleDateFormat("yyyy-MM-dd");
    }
 
+   public AbstractExtendedProperties createWrapped(String prefix){
+      return new WrappedProperties(this, true, prefix);
+   }
+
    public <T> T getValue(String keyName, Transformer<T> transformer, T defaultValue){
       String value = getPropertyInternal(keyName);
       if (value == null){

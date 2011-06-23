@@ -64,12 +64,12 @@ public class MaskedEnumTests {
 
    @Test
    public void testDecompose() throws Exception {
-      Assert.assertEquals(new HashSet(Arrays.asList(TestMaskedEnum.A1, TestMaskedEnum.A2)), TestMaskedEnum.decomposite(TestMaskedEnum.MAP, 6));
+      Assert.assertEquals(new HashSet(Arrays.asList(TestMaskedEnum.A1, TestMaskedEnum.A2)), TestMaskedEnum.FAKE_ENUM.decomposite(6));
    }
 
    @Test
    public void testDecompose2() throws Exception {
-      Assert.assertEquals(new HashSet(Arrays.asList(TestMaskedEnum.A1, TestMaskedEnum.A0, TestMaskedEnum.MASK)), TestMaskedEnum.decomposite(TestMaskedEnum.MAP, 3));
+      Assert.assertEquals(new HashSet(Arrays.asList(TestMaskedEnum.A1, TestMaskedEnum.A0, TestMaskedEnum.MASK)), TestMaskedEnum.FAKE_ENUM.decomposite(3));
    }
 
 

@@ -16,9 +16,7 @@ public class TestMaskedEnum extends MaskedEnum{
    public static final TestMaskedEnum A2 = new TestMaskedEnum(4);
    public static final TestMaskedEnum MASK = new TestMaskedEnum(3);
 
-   public static final FakeEnum<TestMaskedEnum> FAKE_ENUM = new FakeEnum<TestMaskedEnum>(TestMaskedEnum.class);
-
-   public static final NavigableMap<Integer, TestMaskedEnum> MAP = TestMaskedEnum.collect(FAKE_ENUM);
+   public static final MaskedFakeEnum<TestMaskedEnum> FAKE_ENUM = new MaskedFakeEnum<TestMaskedEnum>(TestMaskedEnum.class);
 
    @Override
    public String toString() {
