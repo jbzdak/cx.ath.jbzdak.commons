@@ -19,8 +19,6 @@
 
 package cx.ath.jbzdak.common;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-
 import java.beans.IndexedPropertyChangeEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -96,7 +94,7 @@ public class PropertyChangeSupport implements Serializable{
       this.ignoreEventsWithSameValues = ignoreEventsWithSameValues;
    }
 
-   public boolean addPropertyChangeListener(@NonNull PropertyChangeListener listener){
+   public boolean addPropertyChangeListener( PropertyChangeListener listener){
       try {
          lock.writeLock().lock();
          return listenerSet.add(listener);
@@ -106,7 +104,7 @@ public class PropertyChangeSupport implements Serializable{
 
    }
 
-   public boolean addPropertyChangeListener(@NonNull String propertyName, @NonNull PropertyChangeListener propertyChangeListener){
+   public boolean addPropertyChangeListener( String propertyName,  PropertyChangeListener propertyChangeListener){
       try {
          lock.writeLock().lock();
          if (namedListeners.get(propertyName) == null) {
@@ -119,7 +117,7 @@ public class PropertyChangeSupport implements Serializable{
 
    }
 
-   public boolean removePropertyChangeListener(@NonNull PropertyChangeListener listener){
+   public boolean removePropertyChangeListener( PropertyChangeListener listener){
       try {
          lock.writeLock().lock();
          boolean changed;
@@ -133,7 +131,7 @@ public class PropertyChangeSupport implements Serializable{
       }
    }
 
-   public boolean removePropertyChangeListener(@NonNull String propertyName, @NonNull PropertyChangeListener listener){
+   public boolean removePropertyChangeListener( String propertyName,  PropertyChangeListener listener){
       try {
          lock.writeLock().lock();
          return namedListeners.get(propertyName).removePropertyChangeListener(listener);
@@ -157,7 +155,7 @@ public class PropertyChangeSupport implements Serializable{
 
    }
 
-   public List<PropertyChangeListener> getPropertyChangeListeners(@NonNull String propertyName) {
+   public List<PropertyChangeListener> getPropertyChangeListeners( String propertyName) {
       try {
          lock.readLock().lock();
          PropertyChangeSupport results = namedListeners.get(propertyName);
@@ -170,7 +168,7 @@ public class PropertyChangeSupport implements Serializable{
       }
    }
 
-   public boolean hasListeners(@NonNull String propertyName){
+   public boolean hasListeners( String propertyName){
       try {
          lock.readLock().lock();
          PropertyChangeSupport results = namedListeners.get(propertyName);

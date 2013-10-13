@@ -19,7 +19,7 @@
 
 package cx.ath.jbzdak.common.properties.transformer;
 
-import net.jcip.annotations.NotThreadSafe;
+
 
 import java.text.NumberFormat;
 import java.text.ParseException;
@@ -27,7 +27,7 @@ import java.text.ParseException;
 /**
  * Created by: Jacek Bzdak
  */
-@NotThreadSafe
+
 public class IntTransformer implements Transformer<Integer>{
 
    private final NumberFormat numberFormat;
